@@ -12,8 +12,19 @@ package filesystem;
 public class File {
     private String name;
     private int firstBlock;
-    private int numberOfBlocks;
+    private int totalBlocks;
 
+    public File(String name, int totalBlocks) {
+        this.name = name;
+        this.totalBlocks = totalBlocks;
+    }
+
+    public File(String name, int firstBlock, int totalBlocks) {
+        this.name = name;
+        this.firstBlock = firstBlock;
+        this.totalBlocks = totalBlocks;
+    }
+    
     /**
      * @return the name
      */
@@ -46,13 +57,13 @@ public class File {
      * @return the numberOfBlocks
      */
     public int getNumberOfBlocks() {
-        return numberOfBlocks;
+        return totalBlocks;
     }
 
     /**
      * @param numberOfBlocks the numberOfBlocks to set
      */
     public void setNumberOfBlocks(int numberOfBlocks) {
-        this.numberOfBlocks = numberOfBlocks;
+        this.totalBlocks = numberOfBlocks;
     }
 }

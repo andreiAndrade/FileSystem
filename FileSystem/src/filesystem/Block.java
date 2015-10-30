@@ -17,7 +17,11 @@ public class Block {
     private char contents;
     private boolean empty;
     private int nextIndex;
-    private List<Integer> index = new ArrayList<>();
+    private List<Integer> index;
+
+    public Block(int idBlock) {
+        this.idBlock = idBlock;
+    }
 
     /**
      * @return the idBlock
