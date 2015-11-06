@@ -1,69 +1,50 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package filesystem;
 
-/**
- *
- * @author aluno
- */
 public class File {
     private String name;
     private int firstBlock;
-    private int totalBlocks;
+    private int size;
 
-    public File(String name, int totalBlocks) {
+    public File(String name, int size) {
         this.name = name;
-        this.totalBlocks = totalBlocks;
+        this.size = size;
     }
 
-    public File(String name, int firstBlock, int totalBlocks) {
+    public File(String name, int firstBlock, int size) {
         this.name = name;
         this.firstBlock = firstBlock;
-        this.totalBlocks = totalBlocks;
+        this.size = size;
     }
     
-    /**
-     * @return the name
-     */
+
     public String getName() {
         return name;
     }
 
-    /**
-     * @param name the name to set
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * @return the firstBlock
-     */
+
     public int getFirstBlock() {
         return firstBlock;
     }
 
-    /**
-     * @param firstBlock the firstBlock to set
-     */
+
     public void setFirstBlock(int firstBlock) {
         this.firstBlock = firstBlock;
     }
 
-    /**
-     * @return the numberOfBlocks
-     */
-    public int getNumberOfBlocks() {
-        return totalBlocks;
+    public int getSize() {
+        return size;
     }
 
-    /**
-     * @param numberOfBlocks the numberOfBlocks to set
-     */
-    public void setNumberOfBlocks(int numberOfBlocks) {
-        this.totalBlocks = numberOfBlocks;
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    @Override
+    public String toString(){
+        return "Name: " + name + " || Size: " + size;
     }
 }
