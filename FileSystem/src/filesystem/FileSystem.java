@@ -67,18 +67,74 @@ public class FileSystem {
         }
     }
 
-    private static void showFile(List<Block> hd, File file) {
+    private static void showFileContiguous(File file) {
         int startingShow = file.getFirstBlock();
-        for (Block b : hd) {
-            if (b.getIdBlock() >= startingShow)
-                System.out.print(b.getContents());
-            if (b.getIdBlock() > file.getFirstBlock() + file.getSize())
-                System.out.println("");
-            break;
+        int lastBlock = (startingShow + file.getSize());
+        
+        for(int i = startingShow; i < lastBlock; i++){
+            System.out.print(hd.get(i).getContents());
+        }
+        System.out.println("");
+        
+//        for (Block b : hd) {
+//            if (b.getIdBlock() >= startingShow)
+//                System.out.print(b.getContents());
+//            if (b.getIdBlock() > file.getFirstBlock() + file.getSize())
+//                System.out.println("");
+//            break;
+//        }
+    }
+    
+    private static void showFileLinked(File file) {
+        int showBlock = file.getFirstBlock();
+        System.out.println(hd.get(showBlock).getContents() + "primeiro");
+        
+        while(hd.get(showBlock).getNextIndex() != 0){
+            System.out.println(hd.get(showBlock).getContents());
+            showBlock = hd.get(showBlock).getNextIndex();
         }
     }
 
     private static void executeContiguous() {
+        int option = 0;
+
+        do {
+            
+//            for(Block b : hd){
+//                        System.out.println(b.getIdBlock() + " - " + b.isEmpty() + " - " + b.getContents());
+//                    }
+            
+            System.out.println("Arquivos:");
+
+            //Lista Arquivos
+            int index = 1;
+            for (File f : fileList) {
+                System.out.println(index++ + ". " + f.toString());
+            }
+            System.out.println("0. Trocar método");
+
+            //Escolhe Arquivo para mostrar
+            option = sc.nextInt();
+            
+            if( option > 0 && option <= (fileList.size()) ){
+                
+                try {
+                    AllocationMethod.contiguousAllocation(hd, fileList.get(option-1));
+                    showFileContiguous(fileList.get(option - 1));
+                } catch (Exception e) {
+                    System.out.println("Não foi possível armazenar o arquivo no HD.");
+                }
+            } else if(option == 0){
+                System.out.println("Encerrando Método de alocação contigua...");
+            } else {
+                System.out.println("Comando Inválido! Tente novamente com outro valor.");
+            }
+        }while(option !=0);
+
+        return;
+    }
+    
+    private static void executeIndexed() {
         int option = 0;
 
         do {
@@ -93,37 +149,52 @@ public class FileSystem {
 
             //Escolhe Arquivo para mostrar
             option = sc.nextInt();
+            
+            if( option > 0 && option < (fileList.size()-1) ){
+                try {
+                    AllocationMethod.indexedAllocation(hd, fileList.get(option-1));
+//                    showFile(fileList.get(option - 1));
+                } catch (Exception e) {
+                    System.out.println("Não foi possível armazenar o arquivo no HD.");
+                }
+            } else if(option == 0){
+                System.out.println("Encerrando Método de alocação contigua...");
+            } else {
+                System.out.println("Comando Inválido! Tente novamente com outro valor.");
+            }
+        }while(option !=0);
 
-            switch (option) {
-                case 1:
-                    try {
-                        AllocationMethod.contiguousAllocation(hd, fileList.get(option-1));
-                        showFile(hd, fileList.get(option - 1));
-                    } catch (Exception e) {
-                        System.out.println("Não foi possível armazenar o arquivo no HD.");
-                    }
-                    break;
-                case 2:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 3:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 4:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 5:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 6:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 7:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
-                case 8:
-                    showFile(hd, fileList.get(option - 1));
-                    break;
+        return;
+    }
+    
+    private static void executeLinked() {
+        int option = 0;
+
+        do {
+            System.out.println("Arquivos:");
+
+            //Lista Arquivos
+            int index = 1;
+            for (File f : fileList) {
+                System.out.println(index++ + ". " + f.toString());
+            }
+            System.out.println("0. Trocar método");
+
+            //Escolhe Arquivo para mostrar
+            option = sc.nextInt();
+            
+            if( option > 0 && option < (fileList.size()) ){
+                
+                try {
+                    AllocationMethod.linkedAllocation(hd, fileList.get(option-1));
+                    showFileLinked(fileList.get(option - 1));
+                } catch (Exception e) {
+                    System.out.println("Não foi possível armazenar o arquivo no HD.");
+                }
+            } else if(option == 0){
+                System.out.println("Encerrando Método de alocação contigua...");
+            } else {
+                System.out.println("Comando Inválido! Tente novamente com outro valor.");
             }
         }while(option !=0);
 
@@ -162,13 +233,13 @@ public class FileSystem {
                     break;
 
                 case 2:
-                    fileList = createFileListForContiguous();
-                    executeContiguous();
+                    fileList = createFileListForIndexedAndLinked();
+                    executeIndexed();
                     break;
 
                 case 3:
-                    fileList = createFileListForContiguous();
-                    executeContiguous();
+                    fileList = createFileListForIndexedAndLinked();
+                    executeLinked();
                     break;
 
                 default:

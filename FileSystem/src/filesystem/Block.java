@@ -6,8 +6,8 @@ import java.util.List;
 public class Block {
     private int idBlock;
     private char contents;
-    private boolean empty;
-    private int nextIndex;
+    private boolean empty = true;
+    private int nextIndex = 0;
     private List<Integer> index;
 
     public Block(int idBlock) {

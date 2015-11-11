@@ -12,7 +12,7 @@ public class AllocationMethod {
             if (bHd.isEmpty()) {
                 blocksForAloccation.add(bHd.getIdBlock());
                 if (blocksForAloccation.size() == file.getSize()) {
-                    file.setFirstBlock(blocksForAloccation.get(0));
+                    file.setFirstBlock(blocksForAloccation.get(0) - 1);
                     for (Block b : hd){
                         for (int i = 0; i < file.getSize(); i++){
                             if (b.getIdBlock() == blocksForAloccation.get(i)){
@@ -65,7 +65,7 @@ public class AllocationMethod {
     public static void indexedAllocation(List<Block> hd, File f){
         List<Integer> index = new ArrayList();
 
-        int indexBlock = f.getFirstBlock();;
+        int indexBlock = f.getFirstBlock();
         
         for (int i = 0; i < f.getSize(); i++) {
             for (Block blockHD : hd) {
