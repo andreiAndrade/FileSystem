@@ -6,20 +6,26 @@ import java.util.Scanner;
 
 public class FileSystem {
 
+    //region StaticAttributes
+    static List<Block> hd;
+    static List<File> fileList = new ArrayList();
+    static Scanner sc = new Scanner(System.in);
+    //endregion
+
     //region PrivateMethods
-    private static ArrayList<Block> createHD(){
+    private static ArrayList<Block> createHD() {
         List<Block> hd = new ArrayList();
-        
-        for(int i = 1; i <= 50; i++){
+
+        for (int i = 1; i <= 50; i++) {
             hd.add(new Block(i));
         }
-        
+
         return (ArrayList<Block>) hd;
     }
-    
-    private static ArrayList<File> createFileListForContiguous(){
+
+    private static ArrayList<File> createFileListForContiguous() {
         List<File> fileList = new ArrayList();
-        
+
         fileList.add(new File("Roben.txt", 2));
         fileList.add(new File("Teste.txt", 4));
         fileList.add(new File("Arquivo.doc", 6));
@@ -28,13 +34,13 @@ public class FileSystem {
         fileList.add(new File("Pagina.html", 4));
         fileList.add(new File("Video.mpg", 2));
         fileList.add(new File("Documento.pdf", 4));
-        
+
         return (ArrayList<File>) fileList;
     }
-    
-    private static ArrayList<File> createFileListForIndexedAndLinked(){
+
+    private static ArrayList<File> createFileListForIndexedAndLinked() {
         List<File> fileList = new ArrayList();
-        
+
         fileList.add(new File("Roben.txt", 3, 2));
         fileList.add(new File("Teste.txt", 4, 4));
         fileList.add(new File("Arquivo.doc", 8, 6));
@@ -43,17 +49,17 @@ public class FileSystem {
         fileList.add(new File("Pagina.html", 13, 4));
         fileList.add(new File("Video.mpg", 31, 2));
         fileList.add(new File("Documento.pdf", 24, 4));
-        
+
         return (ArrayList<File>) fileList;
     }
 
-    private static void createBadBlocks(List<Block> hd){
+    private static void createBadBlocks(List<Block> hd) {
 
         Integer[] badBlocks = {10, 20, 30, 35, 50};
 
-        for (Integer i : badBlocks){
-            for (Block b : hd){
-                if (b.getIdBlock() == i){
+        for (Integer i : badBlocks) {
+            for (Block b : hd) {
+                if (b.getIdBlock() == i) {
                     b.setEmpty(false);
                     break;
                 }
@@ -63,24 +69,77 @@ public class FileSystem {
 
     private static void showFile(List<Block> hd, File file) {
         int startingShow = file.getFirstBlock();
-        for (Block b : hd){
+        for (Block b : hd) {
             if (b.getIdBlock() >= startingShow)
                 System.out.print(b.getContents());
             if (b.getIdBlock() > file.getFirstBlock() + file.getSize())
                 System.out.println("");
-                break;
+            break;
         }
     }
+
+    private static void executeContiguous() {
+        int option = 0;
+
+        do {
+            System.out.println("Arquivos:");
+
+            //Lista Arquivos
+            int index = 1;
+            for (File f : fileList) {
+                System.out.println(index++ + ". " + f.toString());
+            }
+            System.out.println("0. Trocar método");
+
+            //Escolhe Arquivo para mostrar
+            option = sc.nextInt();
+
+            switch (option) {
+                case 1:
+                    try {
+                        AllocationMethod.contiguousAllocation(hd, fileList.get(option-1));
+                        showFile(hd, fileList.get(option - 1));
+                    } catch (Exception e) {
+                        System.out.println("Não foi possível armazenar o arquivo no HD.");
+                    }
+                    break;
+                case 2:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 3:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 4:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 5:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 6:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 7:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+                case 8:
+                    showFile(hd, fileList.get(option - 1));
+                    break;
+            }
+        }while(option !=0);
+
+        return;
+    }
+
     //endregion
-    
+
     public static void main(String[] args) {
 
         //region Attributes
-        List<Block> hd = createHD();
-        List<File> fileList = new ArrayList();
+
+
+        hd = createHD();
         createBadBlocks(hd);
-        Scanner sc = new Scanner(System.in);
-        boolean optionValid = false;
+
         int option;
         //endregion
 
@@ -93,103 +152,28 @@ public class FileSystem {
             System.out.println("3. Alocação Enadeada;");
             System.out.println("0. Sair.");
 
-            do {
-                option = sc.nextInt();
+            option = sc.nextInt();
 
-                switch (option) {
-                    case 1:
-                        fileList = createFileListForContiguous();
-                        for (File f : fileList) {
-                            try {
-                                AllocationMethod.contiguousAllocation(hd, f);
-                            } catch (Exception e) {
-                                System.out.println("Não foi possível alocar o arquivo em memória!");
-                            }
-                        }
-                        optionValid = true;
-                        break;
-                    case 2:
-                        fileList = createFileListForIndexedAndLinked();
-                        
-                        for (File f : fileList) {
-                            try {
-                                AllocationMethod.indexedAllocation(hd, f);
-                            } catch (Exception e) {
-                                System.out.println("Não foi possível alocar o arquivo em memória!");
-                            }
-                        }
-                        optionValid = true;
-                        break;
-                    case 3:
-                        fileList = createFileListForIndexedAndLinked();
-                        for (File f : fileList) {
-                            try {
-                                AllocationMethod.linkedAllocation(hd, f);
-                            } catch (Exception e) {
-                                System.out.println("Não foi possível alocar o arquivo em memória!");
-                            }
-                        }
-                        optionValid = true;
-                        break;
-                    default:
-                        System.out.println("Comando inválido!");
-                }
-            } while (!optionValid && option != 0);
-            //endregion
+            switch (option) {
 
-            // region EscolheListaArquivos
-            do {
+                case 1:
+                    fileList = createFileListForContiguous();
+                    executeContiguous();
+                    break;
 
-                System.out.println("Arquivos:");
+                case 2:
+                    fileList = createFileListForContiguous();
+                    executeContiguous();
+                    break;
 
-                //Lista Arquivos
-                int index = 1;
-                for (File f : fileList) {
-                    System.out.println(index++ + ". " + f.toString());
-                }
-                System.out.println(index++ + ". Trocar método");
+                case 3:
+                    fileList = createFileListForContiguous();
+                    executeContiguous();
+                    break;
 
-                //Escolhe Arquivo para mostrar
-                option = sc.nextInt();
-                optionValid = false;
-
-                switch (option) {
-                    case 1:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 2:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 3:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 4:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 5:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 6:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 7:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 8:
-                        showFile(hd, fileList.get(option - 1));
-                        optionValid = true;
-                        break;
-                    case 9:
-                        option = 9;
-                }
-            } while (!optionValid || option == 9);
+                default:
+                    System.out.println("Comando inválido!");
+            }
             //endregion
 
         } while (option != 0);

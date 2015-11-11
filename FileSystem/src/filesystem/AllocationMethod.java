@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllocationMethod {
-    
+
     public static void contiguousAllocation(List<Block> hd, File file) throws Exception {
         List<Integer> blocksForAloccation = new ArrayList();
 
