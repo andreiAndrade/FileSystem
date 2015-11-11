@@ -6,7 +6,7 @@ import java.util.List;
 public class AllocationMethod {
     
     public static void contiguousAllocation(List<Block> hd, File file) throws Exception {
-        List<Integer> blocksForAloccation = new ArrayList<>();
+        List<Integer> blocksForAloccation = new ArrayList();
 
         for (Block bHd : hd){
             if (bHd.isEmpty()) {
@@ -63,7 +63,7 @@ public class AllocationMethod {
     }
     
     public static void indexedAllocation(List<Block> hd, File f){
-        List<Integer> index = new ArrayList<>();
+        List<Integer> index = new ArrayList();
 
         int indexBlock = f.getFirstBlock();;
         

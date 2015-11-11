@@ -8,7 +8,7 @@ public class FileSystem {
 
     //region PrivateMethods
     private static ArrayList<Block> createHD(){
-        List<Block> hd = new ArrayList<>();
+        List<Block> hd = new ArrayList();
         
         for(int i = 1; i <= 50; i++){
             hd.add(new Block(i));
@@ -18,7 +18,7 @@ public class FileSystem {
     }
     
     private static ArrayList<File> createFileListForContiguous(){
-        List<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList();
         
         fileList.add(new File("Roben.txt", 2));
         fileList.add(new File("Teste.txt", 4));
@@ -33,7 +33,7 @@ public class FileSystem {
     }
     
     private static ArrayList<File> createFileListForIndexedAndLinked(){
-        List<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList();
         
         fileList.add(new File("Roben.txt", 3, 2));
         fileList.add(new File("Teste.txt", 4, 4));
@@ -77,7 +77,7 @@ public class FileSystem {
 
         //region Attributes
         List<Block> hd = createHD();
-        List<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList();
         createBadBlocks(hd);
         Scanner sc = new Scanner(System.in);
         boolean optionValid = false;
