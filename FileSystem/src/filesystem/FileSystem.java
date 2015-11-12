@@ -8,7 +8,7 @@ public class FileSystem {
 
     //region StaticAttributes
     static List<Block> hd;
-    static List<File> fileList = new ArrayList();
+    static List<File> fileList;
     static Scanner sc = new Scanner(System.in);
     //endregion
 
@@ -87,7 +87,6 @@ public class FileSystem {
     
     private static void showFileLinked(File file) {
         int showBlock = file.getFirstBlock();
-        
         for(int i = 0; i < file.getSize(); i++){
             for(Block b : hd){
                 if (b.getIdBlock() == showBlock) {
@@ -100,14 +99,19 @@ public class FileSystem {
         System.out.println();
     }
 
+    private static void showFileIndexed(File file) {
+        List<Integer> indexList = hd.get(file.getFirstBlock() - 1).getIndex();
+
+        for (int i : indexList){
+            System.out.print(hd.get(i - 1).getContents());
+        }
+        System.out.println();
+    }
+
     private static void executeContiguous() {
-        int option = 0;
+        int option;
 
         do {
-            
-//            for(Block b : hd){
-//                        System.out.println(b.getIdBlock() + " - " + b.isEmpty() + " - " + b.getContents());
-//                    }
             
             System.out.println("Arquivos:");
 
@@ -135,12 +139,10 @@ public class FileSystem {
                 System.out.println("Comando Inválido! Tente novamente com outro valor.");
             }
         }while(option !=0);
-
-        return;
     }
     
     private static void executeIndexed() {
-        int option = 0;
+        int option;
 
         do {
             System.out.println("Arquivos:");
@@ -158,9 +160,9 @@ public class FileSystem {
             if( option > 0 && option <= (fileList.size()) ){
                 try {
                     AllocationMethod.indexedAllocation(hd, fileList.get(option-1));
-//                    showFile(fileList.get(option - 1));
+                    showFileIndexed(fileList.get(option - 1));
                 } catch (Exception e) {
-                    System.out.println("Não foi possível armazenar o arquivo no HD.");
+                    System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
                 }
             } else if(option == 0){
                 System.out.println("Encerrando Método de alocação contigua...");
@@ -168,12 +170,10 @@ public class FileSystem {
                 System.out.println("Comando Inválido! Tente novamente com outro valor.");
             }
         }while(option !=0);
-
-        return;
     }
     
     private static void executeLinked() {
-        int option = 0;
+        int option;
 
         do {
             System.out.println("Arquivos:");
@@ -194,7 +194,7 @@ public class FileSystem {
                     AllocationMethod.linkedAllocation(hd, fileList.get(option-1));
                     showFileLinked(fileList.get(option - 1));
                 } catch (Exception e) {
-                    System.out.println("Não foi possível armazenar o arquivo no HD.");
+                    System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
                 }
             } else if(option == 0){
                 System.out.println("Encerrando Método de alocação contigua...");
@@ -202,8 +202,6 @@ public class FileSystem {
                 System.out.println("Comando Inválido! Tente novamente com outro valor.");
             }
         }while(option !=0);
-
-        return;
     }
 
     //endregion
@@ -250,6 +248,9 @@ public class FileSystem {
                 default:
                     System.out.println("Comando inválido!");
             }
+
+            hd = createHD();
+            createBadBlocks(hd);
             //endregion
 
         } while (option != 0);

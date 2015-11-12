@@ -32,62 +32,64 @@ public class AllocationMethod {
         throw new Exception();
     }
 
-    public static void linkedAllocation(List<Block> hd, File f){
-        int blockBefore = 0;
+    public static void linkedAllocation(List<Block> hd, File f) throws Exception {
+        Block blockBefore;
         
-        int firstBlock = f.getFirstBlock();
-        
-        for (Block b : hd) {
-            if(b.isEmpty() && b.getIdBlock() == firstBlock) {
-                b.setContents(f.getName().charAt(0));
-                b.setEmpty(false);
-                blockBefore = firstBlock;
-            }
+        Block firstBlock = hd.get(f.getFirstBlock() - 1);
+
+        if (firstBlock.isEmpty()){
+            firstBlock.setContents(f.getName().charAt(0));
+            hd.get(f.getFirstBlock() - 1).setEmpty(false);
+            blockBefore = firstBlock;
+        } else{
+            throw new Exception("Bloco de início do arquivo não está disponível!");
         }
-        
+
+        boolean complete = false;
         for (int i = 0; i < f.getSize(); i++) {
             for (Block blockHD : hd) {
-                System.out.println(blockBefore);
                 if (blockHD.isEmpty()) {
-                    blockHD.setContents(f.getName().charAt(i));
                     blockHD.setEmpty(false);
-                    
-                    if ((i + 1) < f.getSize()) {
-                        for (Block blockBef : hd ) {
-                            if (blockBef.getIdBlock() == blockBefore) {
-                                blockBef.setNextIndex(blockHD.getIdBlock());
-                                blockBefore = blockHD.getIdBlock();
-                                
-                            }
-                        }
-                    }
+                    blockHD.setContents(f.getName().charAt(i + 1));
+
+                    blockBefore.setNextIndex(blockHD.getIdBlock());
+                    blockBefore = blockHD;
+
+                    complete = true;
                     break;
-                } 
+                }
+
+                complete = false;
             }
         }
-        return;
+
+        if (!complete){
+            throw new Exception("Não há espaço suficiente em disco!");
+        }
     }
     
-    public static void indexedAllocation(List<Block> hd, File f){
+    public static void indexedAllocation(List<Block> hd, File f) throws Exception {
         List<Integer> index = new ArrayList();
 
         int indexBlock = f.getFirstBlock();
-        
-        for (int i = 0; i < f.getSize(); i++) {
-            for (Block blockHD : hd) {
-                if (blockHD.isEmpty() && blockHD.getIdBlock() != indexBlock) {
-                    blockHD.setContents(f.getName().charAt(i));
-                    blockHD.setEmpty(false);
-                    index.add(blockHD.getIdBlock());
+
+        if (hd.get(indexBlock - 1).isEmpty()) {
+            boolean complete = false;
+            for (int i = 0; i < (f.getSize() - 1); i++) {
+                for (Block blockHD : hd) {
+                    if (blockHD.isEmpty() && blockHD.getIdBlock() != indexBlock) {
+                        blockHD.setContents(f.getName().charAt(i));
+                        blockHD.setEmpty(false);
+                        index.add(blockHD.getIdBlock());
+                        complete = true;
+                        break;
+                    }
+                    complete = false;
                 }
             }
-        }
-        
-        for (Block blockHD : hd) {
-            if (blockHD.getIdBlock() == indexBlock) {
-                blockHD.setIndex(index);
-            }
-        }
+            if (!complete) throw new Exception("Não há espaço suficíente para alocar o arquivo!");
+            hd.get(indexBlock - 1).setIndex(index);
+        } else throw new Exception("Bloco de indices indíponivel!");
     }
 }
 
