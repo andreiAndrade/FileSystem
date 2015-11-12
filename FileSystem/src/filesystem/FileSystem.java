@@ -87,12 +87,17 @@ public class FileSystem {
     
     private static void showFileLinked(File file) {
         int showBlock = file.getFirstBlock();
-        System.out.println(hd.get(showBlock).getContents() + "primeiro");
         
-        while(hd.get(showBlock).getNextIndex() != 0){
-            System.out.println(hd.get(showBlock).getContents());
-            showBlock = hd.get(showBlock).getNextIndex();
+        for(int i = 0; i < file.getSize(); i++){
+            for(Block b : hd){
+                if (b.getIdBlock() == showBlock) {
+                    System.out.print(b.getContents());
+                    showBlock = b.getNextIndex();
+                    break;
+                }
+            }
         }
+        System.out.println();
     }
 
     private static void executeContiguous() {
@@ -150,7 +155,7 @@ public class FileSystem {
             //Escolhe Arquivo para mostrar
             option = sc.nextInt();
             
-            if( option > 0 && option < (fileList.size()-1) ){
+            if( option > 0 && option <= (fileList.size()) ){
                 try {
                     AllocationMethod.indexedAllocation(hd, fileList.get(option-1));
 //                    showFile(fileList.get(option - 1));
@@ -183,7 +188,7 @@ public class FileSystem {
             //Escolhe Arquivo para mostrar
             option = sc.nextInt();
             
-            if( option > 0 && option < (fileList.size()) ){
+            if( option > 0 && option <= (fileList.size()) ){
                 
                 try {
                     AllocationMethod.linkedAllocation(hd, fileList.get(option-1));

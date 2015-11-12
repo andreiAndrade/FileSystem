@@ -37,29 +37,35 @@ public class AllocationMethod {
         
         int firstBlock = f.getFirstBlock();
         
-        for (Block blockHD : hd) {
-            if(blockHD.isEmpty() && blockHD.getIdBlock() == firstBlock) {
-                blockHD.setContents(f.getName().charAt(0));
-                blockHD.setEmpty(false);
+        for (Block b : hd) {
+            if(b.isEmpty() && b.getIdBlock() == firstBlock) {
+                b.setContents(f.getName().charAt(0));
+                b.setEmpty(false);
                 blockBefore = firstBlock;
             }
         }
         
-        for (int i = 1; i < f.getSize(); i++) {
+        for (int i = 0; i < f.getSize(); i++) {
             for (Block blockHD : hd) {
+                System.out.println(blockBefore);
                 if (blockHD.isEmpty()) {
                     blockHD.setContents(f.getName().charAt(i));
                     blockHD.setEmpty(false);
                     
-                    for (Block blockBef : hd ) {
-                        if (blockBef.getIdBlock() == blockBefore) {
-                            blockBef.setNextIndex(blockBef.getIdBlock());
-                            blockBefore = blockHD.getIdBlock();
+                    if ((i + 1) < f.getSize()) {
+                        for (Block blockBef : hd ) {
+                            if (blockBef.getIdBlock() == blockBefore) {
+                                blockBef.setNextIndex(blockHD.getIdBlock());
+                                blockBefore = blockHD.getIdBlock();
+                                
+                            }
                         }
                     }
-                }
+                    break;
+                } 
             }
         }
+        return;
     }
     
     public static void indexedAllocation(List<Block> hd, File f){

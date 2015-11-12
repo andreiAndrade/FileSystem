@@ -7,11 +7,12 @@ public class Block {
     private int idBlock;
     private char contents;
     private boolean empty = true;
-    private int nextIndex = 0;
+    private int nextIndex;
     private List<Integer> index;
 
     public Block(int idBlock) {
         this.idBlock = idBlock;
+        this.nextIndex = 0;
     }
 
     public int getIdBlock() {
@@ -52,5 +53,10 @@ public class Block {
 
     public void setIndex(List<Integer> index) {
         this.index = index;
+    }
+    
+    public boolean hasNext(){
+        if (this.nextIndex != 0) return true;
+        else return false;
     }
 }
