@@ -111,8 +111,16 @@ public class FileSystem {
     private static void executeContiguous() {
         int option;
 
+        for (int i = 0; i < fileList.size(); i++) {
+            try {
+                AllocationMethod.contiguousAllocation(hd, fileList.get(i));
+            } catch (Exception e) {
+                System.out.println("Não foi possível armazenar o arquivo no HD.");
+            }
+        }
+
         do {
-            
+
             System.out.println("Arquivos:");
 
             //Lista Arquivos
@@ -123,16 +131,13 @@ public class FileSystem {
             System.out.println("0. Trocar método");
 
             //Escolhe Arquivo para mostrar
+            System.out.print("Arquivo: ");
             option = sc.nextInt();
             
             if( option > 0 && option <= (fileList.size()) ){
-                
-                try {
-                    AllocationMethod.contiguousAllocation(hd, fileList.get(option-1));
-                    showFileContiguous(fileList.get(option - 1));
-                } catch (Exception e) {
-                    System.out.println("Não foi possível armazenar o arquivo no HD.");
-                }
+
+                showFileContiguous(fileList.get(option - 1));
+
             } else if(option == 0){
                 System.out.println("Encerrando Método de alocação contigua...");
             } else {
@@ -144,7 +149,20 @@ public class FileSystem {
     private static void executeIndexed() {
         int option;
 
+        for (int i = 0; i < fileList.size(); i++){
+            hd.get(fileList.get(i).getFirstBlock() - 1).setEmpty(false);
+        }
+
+        for (int i = 0; i < fileList.size(); i++){
+            try {
+                AllocationMethod.indexedAllocation(hd, fileList.get(i));
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
+            }
+        }
+
         do {
+
             System.out.println("Arquivos:");
 
             //Lista Arquivos
@@ -155,15 +173,13 @@ public class FileSystem {
             System.out.println("0. Trocar método");
 
             //Escolhe Arquivo para mostrar
+            System.out.print("Arquivo: ");
             option = sc.nextInt();
             
             if( option > 0 && option <= (fileList.size()) ){
-                try {
-                    AllocationMethod.indexedAllocation(hd, fileList.get(option-1));
-                    showFileIndexed(fileList.get(option - 1));
-                } catch (Exception e) {
-                    System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
-                }
+
+                showFileIndexed(fileList.get(option - 1));
+
             } else if(option == 0){
                 System.out.println("Encerrando Método de alocação contigua...");
             } else {
@@ -175,7 +191,20 @@ public class FileSystem {
     private static void executeLinked() {
         int option;
 
+        for (int i = 0; i < fileList.size(); i++){
+            hd.get(fileList.get(i).getFirstBlock() - 1).setEmpty(false);
+        }
+
+        for (int i = 0; i < fileList.size(); i++){
+            try {
+                AllocationMethod.linkedAllocation(hd, fileList.get(i));
+            } catch (Exception e) {
+                System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
+            }
+        }
+
         do {
+
             System.out.println("Arquivos:");
 
             //Lista Arquivos
@@ -186,16 +215,13 @@ public class FileSystem {
             System.out.println("0. Trocar método");
 
             //Escolhe Arquivo para mostrar
+            System.out.print("Arquivo: ");
             option = sc.nextInt();
             
             if( option > 0 && option <= (fileList.size()) ){
-                
-                try {
-                    AllocationMethod.linkedAllocation(hd, fileList.get(option-1));
-                    showFileLinked(fileList.get(option - 1));
-                } catch (Exception e) {
-                    System.out.println(e.getMessage() + " Não foi possível armazenar o arquivo no HD.");
-                }
+
+                showFileLinked(fileList.get(option - 1));
+
             } else if(option == 0){
                 System.out.println("Encerrando Método de alocação contigua...");
             } else {
@@ -226,6 +252,7 @@ public class FileSystem {
             System.out.println("3. Alocação Enadeada;");
             System.out.println("0. Sair.");
 
+            System.out.print("Método: ");
             option = sc.nextInt();
 
             switch (option) {

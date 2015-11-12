@@ -37,13 +37,9 @@ public class AllocationMethod {
         
         Block firstBlock = hd.get(f.getFirstBlock() - 1);
 
-        if (firstBlock.isEmpty()){
-            firstBlock.setContents(f.getName().charAt(0));
-            hd.get(f.getFirstBlock() - 1).setEmpty(false);
-            blockBefore = firstBlock;
-        } else{
-            throw new Exception("Bloco de início do arquivo não está disponível!");
-        }
+        firstBlock.setContents(f.getName().charAt(0));
+        hd.get(f.getFirstBlock() - 1).setEmpty(false);
+        blockBefore = firstBlock;
 
         boolean complete = false;
         for (int i = 0; i < f.getSize(); i++) {
@@ -73,23 +69,22 @@ public class AllocationMethod {
 
         int indexBlock = f.getFirstBlock();
 
-        if (hd.get(indexBlock - 1).isEmpty()) {
-            boolean complete = false;
-            for (int i = 0; i < (f.getSize() - 1); i++) {
-                for (Block blockHD : hd) {
-                    if (blockHD.isEmpty() && blockHD.getIdBlock() != indexBlock) {
-                        blockHD.setContents(f.getName().charAt(i));
-                        blockHD.setEmpty(false);
-                        index.add(blockHD.getIdBlock());
-                        complete = true;
-                        break;
-                    }
-                    complete = false;
+        boolean complete = false;
+        for (int i = 0; i < f.getSize(); i++) {
+            for (Block blockHD : hd) {
+                if (blockHD.isEmpty() && blockHD.getIdBlock() != indexBlock) {
+                    blockHD.setContents(f.getName().charAt(i));
+                    blockHD.setEmpty(false);
+                    index.add(blockHD.getIdBlock());
+                    complete = true;
+                    break;
                 }
+                complete = false;
             }
-            if (!complete) throw new Exception("Não há espaço suficíente para alocar o arquivo!");
-            hd.get(indexBlock - 1).setIndex(index);
-        } else throw new Exception("Bloco de indices indíponivel!");
+        }
+        if (!complete) throw new Exception("Não há espaço suficíente para alocar o arquivo!");
+        hd.get(indexBlock - 1).setIndex(index);
+
     }
 }
 
