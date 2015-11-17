@@ -132,8 +132,14 @@ public class FileSystem {
 
             //Escolhe Arquivo para mostrar
             System.out.print("Arquivo: ");
-            option = sc.nextInt();
-            
+
+            String testOption = sc.nextLine();
+            if (tryParseInt(testOption)) {
+                option = Integer.parseInt(testOption);
+            }else{
+                option = -1;
+            }
+
             if( option > 0 && option <= (fileList.size()) ){
 
                 showFileContiguous(fileList.get(option - 1));
@@ -174,7 +180,12 @@ public class FileSystem {
 
             //Escolhe Arquivo para mostrar
             System.out.print("Arquivo: ");
-            option = sc.nextInt();
+            String testOption = sc.nextLine();
+            if (tryParseInt(testOption)) {
+                option = Integer.parseInt(testOption);
+            }else{
+                option = -1;
+            }
             
             if( option > 0 && option <= (fileList.size()) ){
 
@@ -216,7 +227,12 @@ public class FileSystem {
 
             //Escolhe Arquivo para mostrar
             System.out.print("Arquivo: ");
-            option = sc.nextInt();
+            String testOption = sc.nextLine();
+            if (tryParseInt(testOption)) {
+                option = Integer.parseInt(testOption);
+            }else{
+                option = -1;
+            }
             
             if( option > 0 && option <= (fileList.size()) ){
 
@@ -230,6 +246,15 @@ public class FileSystem {
         }while(option !=0);
     }
 
+    private static boolean tryParseInt(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     //endregion
 
     public static void main(String[] args) {
@@ -240,7 +265,7 @@ public class FileSystem {
         hd = createHD();
         createBadBlocks(hd);
 
-        int option;
+        int option = 0;
         //endregion
 
         do {
@@ -253,32 +278,38 @@ public class FileSystem {
             System.out.println("0. Sair.");
 
             System.out.print("Método: ");
-            option = sc.nextInt();
 
-            switch (option) {
+            String testOption = sc.nextLine();
 
-                case 1:
-                    fileList = createFileListForContiguous();
-                    executeContiguous();
-                    break;
+            if (tryParseInt(testOption)) {
+                option = Integer.parseInt(testOption);
+                switch (option) {
 
-                case 2:
-                    fileList = createFileListForIndexedAndLinked();
-                    executeIndexed();
-                    break;
+                    case 1:
+                        fileList = createFileListForContiguous();
+                        executeContiguous();
+                        break;
 
-                case 3:
-                    fileList = createFileListForIndexedAndLinked();
-                    executeLinked();
-                    break;
+                    case 2:
+                        fileList = createFileListForIndexedAndLinked();
+                        executeIndexed();
+                        break;
 
-                default:
-                    System.out.println("Comando inválido!");
+                    case 3:
+                        fileList = createFileListForIndexedAndLinked();
+                        executeLinked();
+                        break;
+
+                    default:
+                        System.out.println("Comando inválido!");
+                }
+
+                hd = createHD();
+                createBadBlocks(hd);
+            } else{
+                option = -1;
+                System.out.println("Comando inváido!");
             }
-
-            hd = createHD();
-            createBadBlocks(hd);
-            //endregion
 
         } while (option != 0);
 
